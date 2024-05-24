@@ -18,10 +18,10 @@ type Token struct {
     RefreshToken string `json:"refresh_token"` // TODO: huh?
 }
 
-func authenticate(client http.Client, username, password string) (Token, error) {
+func authenticate(client http.Client, email, password string) (Token, error) {
     data := url.Values{
         "grant_type": []string{"password"},
-        "username": []string{username},
+        "username": []string{email},
         "password": []string{password},
         "client_id": []string{"venicebeachV2"},
         "client_secret": []string{"@?Udu.YUS+ecZWJHQ(+rLcnGyM:e8p6p"},
@@ -48,7 +48,7 @@ func authenticate(client http.Client, username, password string) (Token, error) 
     }
 
     if resp.StatusCode < 200 || 299 < resp.StatusCode {
-        return Token{}, fmt.Errorf("status code: %d",resp.StatusCode)
+        return Token{}, fmt.Errorf("%s (status code: %d)", string(body), resp.StatusCode)
     }
 
     var token Token
