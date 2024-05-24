@@ -13,16 +13,13 @@ type discord struct {
     url string
 }
 
-func (d discord) notify(content string) error {
-    return d.post("@everyone " + content, "everyone")
+func (d discord) panic(content string) {
+    d.post("@everyone " + content, "everyone")
+    panic(content)
 }
 
 func (d discord) log(content string) error {
     return d.post(content)
-}
-
-func (d discord) logf(format string, a ...any) error {
-    return d.post(fmt.Sprintf(format, a...))
 }
 
 func (d discord) post(content string, mention ...string) error {
