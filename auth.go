@@ -1,6 +1,13 @@
 package main
 
-import "net/http"
+import (
+	"encoding/json"
+	"fmt"
+	"io"
+	"net/http"
+	"net/url"
+	"strings"
+)
 
 const AUTH_URL = "https://oauth.actinate.com/v6/oauth/token?lang=en"
 
@@ -11,11 +18,7 @@ type Token struct {
     RefreshToken string `json:"refresh_token"` // TODO: huh?
 }
 
-var client = http.Client{
-    Timeout: 30 * time.Second,
-}
-
-func authenticate(username, password string) (*Token, error) {
+func authenticate(client http.Client, username, password string) (Token, error) {
     data := url.Values{
         "grant_type": []string{"password"},
         "username": []string{username},
@@ -29,33 +32,33 @@ func authenticate(username, password string) (*Token, error) {
 
     req, err := http.NewRequest(http.MethodPost, AUTH_URL, strings.NewReader(data.Encode()))
     if err != nil {
-        return nil, fmt.Errorf("new request: %w", err)
+        return Token{}, fmt.Errorf("new request: %w", err)
     }
     req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
 
     resp, err := client.Do(req)
     if err != nil {
-        return nil, fmt.Errorf("do: %w", err)
+        return Token{}, fmt.Errorf("do: %w", err)
     }
     defer resp.Body.Close()
 
     body, err := io.ReadAll(resp.Body)
     if err != nil {
-        return nil, fmt.Errorf("readAll: %w", err)
+        return Token{}, fmt.Errorf("readAll: %w", err)
     }
 
     if resp.StatusCode < 200 || 299 < resp.StatusCode {
-        return nil, fmt.Errorf("status code: %d",resp.StatusCode)
+        return Token{}, fmt.Errorf("status code: %d",resp.StatusCode)
     }
 
     var token Token
 
     err = json.Unmarshal(body, &token)
     if err != nil {
-        return nil, fmt.Errorf("unmarshal: %w", err)
+        return Token{}, fmt.Errorf("unmarshal: %w", err)
     }
 
-    return &token, nil
+    return token, nil
 }
 
 
