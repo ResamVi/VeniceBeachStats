@@ -1,3 +1,4 @@
+// https://birdie0.github.io/discord-webhooks-guide/discord_webhook.html
 package main
 
 import (
@@ -18,6 +19,10 @@ func (d discord) notify(content string) error {
 
 func (d discord) log(content string) error {
     return d.post(content)
+}
+
+func (d discord) logf(format string, a ...any) error {
+    return d.post(fmt.Sprintf(format, a...))
 }
 
 func (d discord) post(content string, mention ...string) error {
