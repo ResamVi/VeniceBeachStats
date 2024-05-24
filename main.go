@@ -1,39 +1,64 @@
 package main
 
 import (
-	"flag"
+	"fmt"
+	"log/slog"
 	"net/http"
 	"time"
+
+	"github.com/caarlos0/env"
 )
 
-func main() {
-    username := flag.String("username", "myuser", "Username for login")
-    password := flag.String("password", "mypassword", "Password for login")
-    webhookURL := flag.String("webhookurl", "https://discord.com/api/webhooks/abcdef", "Optional notifications if something goes wrong")
+type config struct {
+    Email string `env:"EMAIL"`
+    Password string `env:"PASSWORD"`
+    WebhookURL string `env:"WEBHOOK_URL"`
+}
 
-    flag.Parse()
+func main() {
+    cfg := config{}
+    if err := env.Parse(&cfg); err != nil {
+	panic(err)
+    }
+
+    db, err := getDatabase()
+    if err != nil {
+	panic(err)
+    }
 
     var client = http.Client{
 	Timeout: 30 * time.Second,
     }
 
     var discord = discord{
-	url: *webhookURL,
+	url: cfg.WebhookURL,
     }
 
-    token, err := authenticate(client, *username, *password)
+    slog.Info("Start Authenticating", slog.String("Email", cfg.Email))
+
+    token, err := authenticate(client, cfg.Email, cfg.Password)
     if err != nil {
-	discord.notify("'authenticate' failed")
-	panic(err)
+	discord.panic("'authenticate' failed: " + err.Error())
     }
+
+    slog.Info("Authentication succesful", slog.String("AccessToken", token.AccessToken), slog.Int("ExpiresIn", token.ExpiresIn))
+    slog.Info("Start fetching")
 
     for {
 	studio, err := getStudio(client, token)
 	if err != nil {
-	    discord.notify("'getStudio' failed")
-	    panic(err)
+	    discord.panic("'getStudio' failed: " + err.Error())
 	}
-	discord.logf("(%d) %s - %d", studio.ID, studio.Name, studio.CheckedInUsers.Current)
+
+	err = db.insert(time.Now(), studio.CheckedInUsers.Current)
+	if err != nil {
+	    discord.panic("'insert' failed: " + err.Error())
+	}
+
+	str := fmt.Sprintf("(%d) %s - %d", studio.ID, studio.Name, studio.CheckedInUsers.Current)
+
+	slog.Info(str)
+	discord.log(str)
 
 	time.Sleep(5 * time.Minute)
     }
