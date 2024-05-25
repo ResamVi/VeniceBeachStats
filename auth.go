@@ -61,4 +61,46 @@ func authenticate(client http.Client, email, password string) (Token, error) {
     return token, nil
 }
 
+func refreshToken(client http.Client, token Token) (Token, error) {
+    data := url.Values{
+        "client_id": []string{"venicebeachV2"},
+        "client_secret": []string{"@?Udu.YUS+ecZWJHQ(+rLcnGyM:e8p6p"},
+        "app_version": []string{"6.1.5"},
+        "os_version": []string{"34"},
+        "os": []string{"android"},
+        "grant_type": []string{"refresh_token"},
+        "refresh_token": []string{token.RefreshToken},
+        "expired_access_token": []string{token.AccessToken},
+    }
 
+    req, err := http.NewRequest(http.MethodPost, AUTH_URL, strings.NewReader(data.Encode()))
+    if err != nil {
+        return Token{}, fmt.Errorf("new request: %w", err)
+    }
+    req.Header.Add("Content-Type", "application/x-www-form-urlencoded")
+
+    resp, err := client.Do(req)
+    if err != nil {
+        return Token{}, fmt.Errorf("do: %w", err)
+    }
+    defer resp.Body.Close()
+
+    body, err := io.ReadAll(resp.Body)
+    if err != nil {
+        return Token{}, fmt.Errorf("readAll: %w", err)
+    }
+
+    if resp.StatusCode < 200 || 299 < resp.StatusCode {
+        return Token{}, fmt.Errorf("%s (status code: %d)", string(body), resp.StatusCode)
+    }
+
+    var newToken Token
+
+    err = json.Unmarshal(body, &newToken)
+    if err != nil {
+        return Token{}, fmt.Errorf("unmarshal: %w", err)
+    }
+
+    return newToken, nil
+
+}

@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -24,6 +25,8 @@ type Response struct {
     Studio Studio `json:"studio"`
 }
 
+var expiredErr = errors.New("token expired")
+
 func getStudio(client http.Client, token Token) (Studio, error) {
     req, err := http.NewRequest(http.MethodGet, STUDIO_URL, nil)
     if err != nil {
@@ -41,8 +44,12 @@ func getStudio(client http.Client, token Token) (Studio, error) {
         return Studio{}, fmt.Errorf("readAll: %w", err)
     }
 
+    if resp.StatusCode == 498 { // Token expired
+        return Studio{}, expiredErr
+    }
+
     if resp.StatusCode < 200 || 299 < resp.StatusCode {
-        return Studio{}, fmt.Errorf("status code: %d",resp.StatusCode)
+        return Studio{}, fmt.Errorf("%s (status code: %d)", string(body), resp.StatusCode)
     }
 
     var response Response

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -46,7 +47,13 @@ func main() {
 
     for {
 	studio, err := getStudio(client, token)
-	if err != nil {
+	if err != nil && errors.Is(err, expiredErr) {
+	    token, err = refreshToken(client, token)
+	    if err != nil {
+		discord.panic("'refreshToken' failed: " + err.Error())
+	    }
+	    continue
+	} else if err != nil {
 	    discord.panic("'getStudio' failed: " + err.Error())
 	}
 
