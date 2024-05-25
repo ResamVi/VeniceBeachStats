@@ -8,8 +8,15 @@ import (
 	"net/http"
 )
 
-// Studio VeniceBeach Südstadt
-const STUDIO_URL = "https://venicebeach.api.actinate.com/gym/v1/studios/43?lang=en"
+const (
+    // Studio VeniceBeach Südstadt
+    SUEDSTADT = "suedstadt"
+    SUEDSTADT_URL = "https://venicebeach.api.actinate.com/gym/v1/studios/43?lang=en"
+
+    // Studio VeniceBeach Postgalerie
+    POSTGALERIE = "postgalerie"
+    POSTGALERIE_URL = "https://venicebeach.api.actinate.com/gym/v1/studios/76?lang=en"
+)
 
 type CheckedInUsers struct {
     Current int `json:"current"`
@@ -27,8 +34,8 @@ type Response struct {
 
 var expiredErr = errors.New("token expired")
 
-func getStudio(client http.Client, token Token) (Studio, error) {
-    req, err := http.NewRequest(http.MethodGet, STUDIO_URL, nil)
+func getStudio(client http.Client, url string, token Token) (Studio, error) {
+    req, err := http.NewRequest(http.MethodGet, url, nil)
     if err != nil {
         return Studio{}, fmt.Errorf("new request: %w", err)
     }

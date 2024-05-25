@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"fmt"
 	"log/slog"
 	"net/http"
@@ -46,27 +45,46 @@ func main() {
     slog.Info("Start fetching")
 
     for {
-	studio, err := getStudio(client, token)
-	if err != nil && errors.Is(err, expiredErr) {
+	if isExpired(client, token) {
 	    token, err = refreshToken(client, token)
 	    if err != nil {
 		discord.panic("'refreshToken' failed: " + err.Error())
 	    }
+
+	    slog.Info("refreshed token", slog.String("AccessToken", token.AccessToken), slog.Int("ExpiresIn", token.ExpiresIn))
+	    discord.log("refreshed token")
 	    continue
-	} else if err != nil {
-	    discord.panic("'getStudio' failed: " + err.Error())
 	}
 
-	err = db.insert(time.Now(), studio.CheckedInUsers.Current)
+	err = fetchData(client, db, discord, token, SUEDSTADT, SUEDSTADT_URL)
 	if err != nil {
-	    discord.panic("'insert' failed: " + err.Error())
+	    discord.panic("'fetchData' for suedstadt failed: " + err.Error())
 	}
 
-	str := fmt.Sprintf("(%d) %s - %d", studio.ID, studio.Name, studio.CheckedInUsers.Current)
+	err = fetchData(client, db, discord, token, POSTGALERIE, POSTGALERIE_URL,)
+	if err != nil {
+	    discord.panic("'fetchData' for postgalerie failed: " + err.Error())
+	}
 
-	slog.Info(str)
-	discord.log(str)
 
 	time.Sleep(5 * time.Minute)
     }
+}
+func fetchData(client http.Client, db DB, discord discord, token Token, tableName, url string,) error {
+    studio, err := getStudio(client, url, token)
+    if err != nil {
+	return fmt.Errorf("'getStudio' failed: %w", err)
+    }
+
+    err = db.insert(tableName, time.Now(), studio.CheckedInUsers.Current)
+    if err != nil {
+	return fmt.Errorf("'insert' failed: %w", err)
+    }
+
+    str := fmt.Sprintf("(%d) %s - %d", studio.ID, studio.Name, studio.CheckedInUsers.Current)
+
+    slog.Info(str)
+    discord.log(str)
+
+    return nil
 }

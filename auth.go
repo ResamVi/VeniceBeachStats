@@ -61,6 +61,22 @@ func authenticate(client http.Client, email, password string) (Token, error) {
     return token, nil
 }
 
+func isExpired(client http.Client, token Token) bool {
+    req, err := http.NewRequest(http.MethodGet, SUEDSTADT_URL, nil)
+    if err != nil {
+        return false
+    }
+    req.Header.Add("Authorization", token.TokenType + " " + token.AccessToken)
+
+    resp, err := client.Do(req)
+    if err != nil {
+        return false
+    }
+    defer resp.Body.Close()
+
+    return resp.StatusCode == 498
+}
+
 func refreshToken(client http.Client, token Token) (Token, error) {
     data := url.Values{
         "client_id": []string{"venicebeachV2"},

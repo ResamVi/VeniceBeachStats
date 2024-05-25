@@ -11,8 +11,9 @@ type DB struct {
     db *sql.DB
 }
 
-func (db DB) insert(date time.Time, count int) error {
-    _, err := db.db.Exec("INSERT INTO suedstadt(date, count) VALUES (?, ?)", date.Format(time.DateTime), count)
+func (db DB) insert(studioName string, date time.Time, count int) error {
+    query := fmt.Sprintf("INSERT INTO %s(date, count) VALUES (?, ?)", studioName)
+    _, err := db.db.Exec(query, date.Format(time.DateTime), count)
     if err != nil {
         return fmt.Errorf("exec: %w", err)
     }
@@ -28,6 +29,7 @@ func getDatabase() (DB, error) {
 
     sqlStmt := `
         CREATE TABLE IF NOT EXISTS suedstadt (date TEXT NOT NULL PRIMARY KEY, count INTEGER);
+        CREATE TABLE IF NOT EXISTS postgalerie (date TEXT NOT NULL PRIMARY KEY, count INTEGER);
     `
     _, err = db.Exec(sqlStmt)
     if err != nil {
