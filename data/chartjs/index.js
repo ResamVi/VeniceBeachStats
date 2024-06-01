@@ -1,5 +1,4 @@
 import { Chart } from 'chart.js/auto';
-import { format, fromUnixTime } from 'date-fns';
 import { de } from 'date-fns/locale';
 
 import data from '../data.js';
@@ -38,13 +37,6 @@ new Chart(
                         displayFormats: {
                             hour: 'EEEE, kk:mm'
                         }
-                    },
-                    ticks: {
-                        // callback: function(val, index) {
-                        //     console.log(index);
-                        //     // return index % 2 === 0 ? this.getLabelForValue(val) : '';
-                        //     return format(fromUnixTime(val), "dd.MM.yyyy");
-                        // },
                     },
                     grid: {
                         color: (ctx) => {
