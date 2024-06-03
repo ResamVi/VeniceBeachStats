@@ -1,0 +1,16 @@
+{
+  "name": "echarts",
+  "source": "index.html",
+  "scripts": {
+    "develop": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "buffer": "^6.0.3",
+    "parcel": "latest"
+  },
+  "dependencies": {
+    "date-fns": "^3.6.0",
+    "echarts": "^5.5.0"
+  }
+}

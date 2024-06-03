@@ -2,7 +2,7 @@ import ApexCharts from 'apexcharts';
 
 import data from '../data.js';
 
-import { format, fromUnixTime } from 'date-fns'
+import { format } from 'date-fns'
 import { de } from "date-fns/locale";
 
 let transformed = data.map(row => {

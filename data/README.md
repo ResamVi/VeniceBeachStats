@@ -31,7 +31,7 @@ Mit großen Datenmengen lässt sich leicht arbeiten.
     - Annotations, Time Support brauchen alles Plugins.
 
 - (+) Freebies
-    - Hover, Responsiveness
+    - Mouse Hover, Responsiveness, Legende
 
 - (-) Doofste Sachen
     - Die Dokumentation für detaillierte Konfiguration
@@ -91,8 +91,10 @@ Nur mit großen Datenmengen war hier etwas schwierig zu arbeiten.
 Frappe Charts
 https://github.com/frappe/charts
 
+Sieht poliert aus, aber für tiefgründigeres ist es doch sehr nervig.
+
 - (-) Einfache Beispiele zum Anfangen
-    - Es gibt ein Beispiel. Das wars. "Find den Rest selber raus aus unserer Doku. "
+    - Es gibt ein (*1*) Beispiel. Das wars. "Find den Rest selber raus aus unserer Doku. "
 
 - (-) Dokumentation+Beispiele zum Konfigurieren
     - "Vorschau von den Einstellungen die wir erklären? Ne, gibs nicht"
@@ -109,11 +111,34 @@ https://github.com/frappe/charts
 
 - (-) Doofste Sachen
     - Die Dokumentation ist hauptsächlich Text für ein Thema was hauptsächlich bildlich ist. Man weiß nichtmal was man erwarten soll, wenn man meint die richtige Konfiguration gefunden zu haben
-    - 
 
 echarts
 https://echarts.apache.org/en/index.html
 
+Scheint der mächtigste Kandidat zu sein. Dokumentation navigieren ist etwas umständlicher weil die explanation-type Doku (Handbook) prägnant gehalten wurde aber die Referenz ("API") und 
+Google für meine Ziele nötig waren.
+
+- (++) Einfache Beispiele zum Anfang
+    - Für jeden Chart-Typ ein Beispiel mit Variationen
+
+- (+) Dokumentation+Beispiele zum Konfigurieren
+    - Ganzes Sortiment an ausgefallenen Beispielen
+    - Es gibt Beispiele zur Konfigurationen und Konzepten. Aber sehr spärlich.
+    - Das Handbook stellt Konzepte vor aber nicht sehr ausfürlich (wie Visual Mapping funktioniert erarbeitete ich mir besser aus Beispielen.)
+
+- (+++) Annotations
+    - X und Y-Ranges sind da und angenehm zu benutzen
+
+- (+) Time Support
+    - Grundsätzlich da. Date Formatierung muss man nur selber basteln.
+
+- (-) Freebies
+    - Der Grundchart ist minimal gehalten
+
+- (-) Doofste Sachen
+    - Responsiveness ist kein Freebie: https://echarts.apache.org/handbook/en/concepts/chart-size#listen-to-the-container-size-to-change-the-chart-size
+    - Kein Mouse Hover Freebie als Batterie beinhaltet
+    - Fängt sehr spärlich an und muss von da an alles konfiguriert werden
 
 chartist.js
 https://gionkunz.github.io/chartist-js/
