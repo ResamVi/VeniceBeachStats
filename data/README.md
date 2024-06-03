@@ -133,7 +133,8 @@ Google für meine Ziele nötig waren.
     - Grundsätzlich da. Date Formatierung muss man nur selber basteln.
 
 - (-) Freebies
-    - Der Grundchart ist minimal gehalten
+    - Der Grundchart ist minimal gehalten. Man muss sich alles selber konfigurieren
+    - Dafür ist die Auswahl groß
 
 - (-) Doofste Sachen
     - Responsiveness ist kein Freebie: https://echarts.apache.org/handbook/en/concepts/chart-size#listen-to-the-container-size-to-change-the-chart-size
@@ -142,3 +143,30 @@ Google für meine Ziele nötig waren.
 
 chartist.js
 https://gionkunz.github.io/chartist-js/
+
+Kann drei Typen: Line Charts, Bar Charts, Pie Charts. Der Umfang ist sehr eingeschränkt dafür ist es elegant in dem was es kann.
+
+
+- (++) Einfache Beispiele zum Anfang
+    - Beispiele zu alle Varianten und den Code dazu daneben an dem man rumdocktern kann
+    - Doof ist nur für die v0.11 ist es super ausführlich aber v1.x ist es noch WIP.
+
+- (+++) Dokumentation+Beispiele zum Konfigurieren
+    - Viel Optionen gibt es
+
+- (+++) Time Support
+    - Eingebaut und sehr elegant
+
+- (---) Annotationen
+    - Keine
+
+- (-) Freebies
+    - SVG Support
+    - 10kB Dependency
+
+- (-) Doofste Sachen
+    - Erlaubt wirklich keine Extrawürste (Legende, Mouse Hover, Zoom)
+
+Anmerkung des Verfassers:
+Probiert man eine große Palette an Libraries merkt man wie die kleinen Dinge viel Ausmachen und die Developer Experience beeinträchtigen.
+X macht es am Besten.
