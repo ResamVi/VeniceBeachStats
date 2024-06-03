@@ -3,7 +3,29 @@
 Collects samples how many members are currently working out at the [VeniceBeach gym](https://www.venicebeach-fitness.de/clubs/venicebeach/karlsruhe/) in Karlsruhe. 
 This data can be further analysed to answer the question when the gym is at its most empty state so I may workout without feeling too self-conscious, haha!
 
-## Setup
+## Data
+
+Check
+
+Run `sqlite3 venicebeach.db` and query
+```
+SELECT * FROM suedstadt;
+```
+
+To get some samples ranging from `2024-05-XX` to `2024-05-YY`
+
+```
+date                 count
+-------------------  -----
+2024-05-31 07:03:13  44   
+2024-05-31 07:08:16  45   
+2024-05-31 07:13:17  45   
+2024-05-31 07:18:18  48   
+2024-05-31 07:23:19  50   
+2024-05-31 07:28:19  52  
+```
+
+## Data Scraping Setup
 
 Run:
 ```

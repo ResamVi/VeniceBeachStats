@@ -1,0 +1,15 @@
+{
+  "name": "apexcharts",
+  "source": "index.html",
+  "scripts": {
+    "develop": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "parcel": "latest"
+  },
+  "dependencies": {
+    "apexcharts": "^3.49.1",
+    "date-fns": "^3.6.0"
+  }
+}

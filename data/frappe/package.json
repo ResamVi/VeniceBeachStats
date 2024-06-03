@@ -1,0 +1,14 @@
+{
+  "name": "frappe",
+  "source": "index.html",
+  "scripts": {
+    "develop": "parcel",
+    "build": "parcel build"
+  },
+  "devDependencies": {
+    "parcel": "latest"
+  },
+  "dependencies": {
+    "frappe-charts": "^1.6.2"
+  }
+}
